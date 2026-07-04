@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hodisa Opa Panel</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins;
+}
+
+body{
+    min-height:100vh;
+    background: linear-gradient(135deg,#fbc2eb,#a6c1ee);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px 0;
+}
+
+.app{
+    width:95%;
+    max-width:430px;
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(18px);
+    border-radius:25px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.2);
+    overflow:hidden;
+}
+
+/* HEADER */
+.header{
+    background: linear-gradient(135deg,#ff9966,#ff5e62);
+    color:white;
+    text-align:center;
+    padding:24px 20px;
+    position:relative;
+    overflow:hidden;
+}
+
+.header::before{
+    content:"";
+    position:absolute;
+    top:-40px; right:-40px;
+    width:120px; height:120px;
+    background:rgba(255,255,255,0.15);
+    border-radius:50%;
+}
+
+.header::after{
+    content:"";
+    position:absolute;
+    bottom:-50px; left:-30px;
+    width:100px; height:100px;
+    background:rgba(255,255,255,0.1);
+    border-radius:50%;
+}
+
+.header h1{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:0.5px;
+    position:relative;
+}
+
+.header p{
+    position:relative;
+    opacity:0.9;
+    font-size:13px;
+    margin-top:4px;
+}
+
+/* NAV */
+.nav{
+    display:flex;
+    justify-content:space-around;
+    background:rgba(255,255,255,0.3);
+    padding:10px;
+    gap:6px;
+}
+
+.nav button{
+    border:none;
+    background:none;
+    font-weight:600;
+    cursor:pointer;
+    color:#3a2a20;
+    transition:0.3s;
+    padding:8px 10px;
+    border-radius:12px;
+    flex:1;
+    font-family:Poppins;
+    font-size:13px;
+}
+
+.nav button:hover{
+    color:#ff5e62;
+    background:rgba(255,255,255,0.5);
+}
+
+.nav button.on{
+    background:white;
+    color:#ff5e62;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* SECTION */
+.section{
+    display:none;
+    padding:15px;
+}
+
+.active{
+    display:block;
+}
+
+/* CARD */
+.card{
+    background:white;
+    padding:15px;
+    border-radius:18px;
+    margin-bottom:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    animation: fade 0.4s ease;
+}
+
+@keyframes fade{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.card h3{
+    font-size:15px;
+    font-weight:700;
+    margin-bottom:10px;
+    color:#3a2a20;
+}
+
+/* PROGRESS RING */
+.ring-wrap{
+    display:flex;
+    justify-content:center;
+    margin:6px 0 4px;
+}
+
+.ring{
+    position:relative;
+    width:140px;
+    height:140px;
+}
+
+.ring svg{
+    transform:rotate(-90deg);
+    width:100%;
+    height:100%;
+}
+
+.ring circle{
+    fill:none;
+    stroke-width:12;
+}
+
+.ring .bg{
+    stroke:#ffe3d9;
+}
+
+.ring .fg{
+    stroke:#ff5e62;
+    stroke-linecap:round;
+    transition:stroke-dashoffset 0.5s ease;
+}
+
+.ring-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.ring-label .num{
+    font-size:26px;
+    font-weight:800;
+    color:#ff5e62;
+}
+
+.ring-label .txt{
+    font-size:11px;
+    color:#999;
+    font-weight:600;
+}
+
+.mood-row{
+    display:flex;
+    justify-content:space-around;
+    margin-top:14px;
+}
+
+.mood{
+    font-size:26px;
+    cursor:pointer;
+    opacity:0.4;
+    transition:0.25s;
+    border-radius:50%;
+    padding:6px;
+}
+
+.mood:hover{
+    opacity:0.8;
+    transform:scale(1.15);
+}
+
+.mood.picked{
+    opacity:1;
+    background:#ffe3d9;
+    transform:scale(1.2);
+}
+
+/* TASK */
+.task{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:6px 0;
+    font-size:14px;
+    color:#333;
+}
+
+.task input{
+    transform:scale(1.2);
+    accent-color:#ff5e62;
+}
+
+.task.checked{
+    text-decoration:line-through;
+    color:#bbb;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:14px;
+    background: linear-gradient(135deg,#ff9966,#ff5e62);
+    color:white;
+    font-weight:700;
+    margin-top:10px;
+    cursor:pointer;
+    transition:0.3s;
+    font-family:Poppins;
+    font-size:14px;
+}
+
+.btn:hover{
+    transform:scale(1.03);
+    box-shadow:0 8px 18px rgba(255,94,98,0.35);
+}
+
+/* TEXTAREA */
+textarea{
+    width:100%;
+    height:80px;
+    border-radius:12px;
+    border:none;
+    padding:10px;
+    outline:none;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    font-family:Poppins;
+    resize:vertical;
+}
+
+.stat-row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    font-size:14px;
+    color:#444;
+    border-bottom:1px dashed #ffe6de;
+}
+
+.stat-row:last-child{
+    border-bottom:none;
+}
+
+.stat-row b{
+    color:#ff5e62;
+}
+
+.ok-msg{
+    display:none;
+    background:#fff4e0;
+    border:1.5px dashed #ffb74d;
+    color:#a15c00;
+    font-size:13px;
+    font-weight:600;
+    padding:12px 14px;
+    border-radius:14px;
+    margin-top:10px;
+    line-height:1.4;
+    animation: fade 0.4s ease;
+}
+
+.ok-msg.show{
+    display:block;
+}
+
+.ok-msg.success{
+    background:#e6f7ec;
+    border-color:#4caf50;
+    color:#1e7a34;
+}
+
+/* WELCOME SCREEN */
+.welcome{
+    position:fixed;
+    inset:0;
+    background: linear-gradient(135deg,#fbc2eb,#a6c1ee);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:20px;
+}
+
+.welcome-card{
+    width:95%;
+    max-width:380px;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(10px);
+    border-radius:25px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    padding:32px 26px;
+    text-align:center;
+    animation: fade 0.5s ease;
+}
+
+.w-emoji{
+    font-size:46px;
+    margin-bottom:6px;
+}
+
+.welcome-card h2{
+    font-size:22px;
+    font-weight:800;
+    color:#ff5e62;
+    margin-bottom:6px;
+}
+
+.w-sub{
+    font-size:13px;
+    color:#888;
+    margin-bottom:14px;
+}
+
+.w-quote{
+    font-size:12.5px;
+    color:#a15c00;
+    background:#fff4e0;
+    border-radius:12px;
+    padding:10px 12px;
+    margin-top:4px;
+    display:none;
+    line-height:1.4;
+    font-style:italic;
+}
+
+.w-quote.show{
+    display:block;
+    animation: fade 0.4s ease;
+}
+
+/* FORGOT MODAL */
+.forgot-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(40,20,15,0.45);
+    align-items:center;
+    justify-content:center;
+    z-index:90;
+    padding:20px;
+}
+
+.forgot-overlay.show{
+    display:flex;
+}
+
+.forgot-card{
+    width:100%;
+    max-width:340px;
+    background:white;
+    border-radius:22px;
+    padding:26px 22px;
+    text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    animation: fade 0.35s ease;
+}
+
+.f-emoji{
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.forgot-card h3{
+    font-size:17px;
+    font-weight:800;
+    color:#ff5e62;
+    margin-bottom:6px;
+}
+
+.forgot-card p{
+    font-size:13px;
+    color:#555;
+    margin-bottom:16px;
+    line-height:1.5;
+}
+
+.forgot-card p b{
+    color:#ff5e62;
+}
+
+.btn-outline{
+    background:white;
+    color:#ff5e62;
+    border:2px solid #ffc9bd;
+}
+
+.btn-outline:hover{
+    background:#fff1ee;
+    box-shadow:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME SCREEN -->
+<div class="welcome" id="welcome">
+  <div class="welcome-card">
+    <div class="w-emoji">🍞</div>
+    <h2 id="wGreetTime">Xayrli tong!</h2>
+    <p class="w-sub">Hodisa Opa Panel'ga xush kelibsiz</p>
+    <div class="w-quote" id="wQuote"></div>
+    <button class="btn" id="wStartBtn" onclick="handleWelcomeClick()">Kirish</button>
+  </div>
+</div>
+
+<div class="app" id="mainApp" style="display:none;">
+
+<div class="header">
+    <h1>🍞 HODISA OPA PANEL</h1>
+    <p id="headerGreet">Nonvoy & Ishlab chiqarish</p>
+</div>
+
+<!-- FORGOT MODAL -->
+<div class="forgot-overlay" id="forgotOverlay">
+  <div class="forgot-card">
+    <div class="f-emoji">🤔</div>
+    <h3>Esingizdan chiqdimi?</h3>
+    <p id="forgotText">Hali <b id="forgotCount">0</b> ta mahsulot belgilanmagan.</p>
+    <button class="btn" onclick="chooseSabab()">✍️ Ha, sababi bor</button>
+    <button class="btn btn-outline" onclick="backToTasks()">↩ Orqaga qaytib belgilayman</button>
+  </div>
+</div>
+
+<div class="nav">
+    <button class="on" onclick="show('home', this)">🏠 Home</button>
+    <button onclick="show('tasks', this)">📋 Mahsulotlar</button>
+    <button onclick="show('done', this)">✅ Yakun</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="section active">
+    <div class="card">
+        <h3>Bugungi kayfiyat</h3>
+        <div class="mood-row">
+            <span class="mood" onclick="pickMood(this,'😴')">😴</span>
+            <span class="mood" onclick="pickMood(this,'🙂')">🙂</span>
+            <span class="mood" onclick="pickMood(this,'😃')">😃</span>
+            <span class="mood" onclick="pickMood(this,'🔥')">🔥</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Bugungi progress</h3>
+        <div class="ring-wrap">
+            <div class="ring">
+                <svg viewBox="0 0 140 140">
+                    <circle class="bg" cx="70" cy="70" r="60"></circle>
+                    <circle class="fg" id="ringFg" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+                </svg>
+                <div class="ring-label">
+                    <div class="num" id="ringNum">0%</div>
+                    <div class="txt">bajarildi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TASKS -->
+<div id="tasks" class="section">
+
+    <div class="card">
+        <h3>🥐 Non mahsulotlari</h3>
+
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Bulochka (Pitsa, Pide)</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Somsa</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Chuchvara (yarim tayyor)</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Blinchik</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Manti xamiri</div>
+    </div>
+
+    <div class="card">
+        <h3>🍞 Xamir mahsulotlar</h3>
+
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Somsa xamiri (varaqa)</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Tovuqli somsa xamiri</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Varaqa (yarim tayyor)</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Sloyonoe somsa xamiri</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Napoleon xamiri</div>
+    </div>
+
+    <div class="card">
+        <h3>🍪 Shirinliklar</h3>
+
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Rogalik</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Romashka</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Qurabiya</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Bulochka Sara</div>
+    </div>
+
+    <div class="card">
+        <h3>🧹 Tozalik</h3>
+
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> 2 ta ish stolini tozalash</div>
+        <div class="task"><input type="checkbox" class="t" onchange="onCheck(this)"> Xolodilnikni artish</div>
+    </div>
+
+    <button class="btn" onclick="go()">➡ Yakunlash</button>
+</div>
+
+<!-- DONE -->
+<div id="done" class="section">
+
+    <div class="card">
+        <h3>📝 Izoh</h3>
+        <textarea id="comment" placeholder="Bugun ish haqida yozing..."></textarea>
+    </div>
+
+    <div class="card" id="sababCard" style="display:none;">
+        <h3>⚠️ Sabab</h3>
+        <textarea id="sabab" placeholder="Nega hammasi bajarilmadi? Masalan: xamir yetishmadi..."></textarea>
+    </div>
+
+    <div class="card">
+        <div class="stat-row"><span>✔ Bajarildi</span><b id="doneCount">0</b></div>
+        <div class="stat-row"><span>❌ Qoldi</span><b id="leftCount">0</b></div>
+        <div class="stat-row"><span>😊 Kayfiyat</span><b id="finalMood">—</b></div>
+    </div>
+
+    <div class="ok-msg" id="okMsg"></div>
+
+    <button class="btn" onclick="submit()">✅ Tasdiqlash</button>
+</div>
+
+</div>
+
+<script>
+
+let currentMood = null;
+let welcomeStage = 1;
+
+const MOTIVATION = [
+  "Bugun ham pechingiz issiq, non hidingiz shirin bo'lsin! 🍞",
+  "Har bir somsa — mehringizning bir bo'lagi. Ishga xayrli boshlanish! 🥐",
+  "Xamirdan naqshgacha — ustalik qo'lingizda. Omad! ✨",
+  "Bugungi kun ham chiroyli mahsulotlar bilan to'lsin! 🌸",
+  "Yangi kun, yangi tandir, yangi zafarlar! 🚀",
+  "Qo'lingizdan chiqqan har bir non — mijozlar uchun quvonch. Omad! 🎉",
+  "Bugun ham mehnatingiz shirin natijalar bersin! 🍪"
+];
+
+function greetByTime(){
+  const h = new Date().getHours();
+  if(h >= 5 && h < 11) return {emoji:"🌅", text:"Xayrli tong"};
+  if(h >= 11 && h < 17) return {emoji:"☀️", text:"Hayrli kun"};
+  if(h >= 17 && h < 22) return {emoji:"🌇", text:"Xayrli kech"};
+  return {emoji:"🌙", text:"Xayrli tun"};
+}
+
+(function initWelcomeTime(){
+  const g = greetByTime();
+  document.querySelector('.w-emoji').textContent = g.emoji;
+  document.getElementById('wGreetTime').textContent = g.text + "!";
+})();
+
+function handleWelcomeClick(){
+  const quote = document.getElementById('wQuote');
+  const btn = document.getElementById('wStartBtn');
+
+  if(welcomeStage === 1){
+    const g = greetByTime();
+    document.getElementById('wGreetTime').textContent = g.text + "!";
+    const phrase = MOTIVATION[Math.floor(Math.random()*MOTIVATION.length)];
+    quote.textContent = phrase;
+    quote.classList.add('show');
+    btn.textContent = "Ishni boshlaymizmi? →";
+    welcomeStage = 2;
+  }else{
+    enterApp();
+  }
+}
+
+function enterApp(){
+  document.getElementById('welcome').style.display = "none";
+  document.getElementById('mainApp').style.display = "block";
+}
+
+function show(id, btn){
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("on"));
+    if(btn) btn.classList.add("on");
+}
+
+function pickMood(el, emoji){
+    document.querySelectorAll(".mood").forEach(m=>m.classList.remove("picked"));
+    el.classList.add("picked");
+    currentMood = emoji;
+}
+
+function updateRing(){
+    let total = document.querySelectorAll(".t").length;
+    let checked = document.querySelectorAll(".t:checked").length;
+    let pct = total ? Math.round((checked/total)*100) : 0;
+    let circumference = 377;
+    let offset = circumference - (circumference * pct/100);
+    document.getElementById("ringFg").style.strokeDashoffset = offset;
+    document.getElementById("ringNum").innerText = pct + "%";
+}
+
+function onCheck(el){
+    el.closest(".task").classList.toggle("checked", el.checked);
+    updateRing();
+}
+
+/* DONE */
+function go(){
+    let total = document.querySelectorAll(".t").length;
+    let checked = document.querySelectorAll(".t:checked").length;
+
+    document.getElementById("doneCount").innerText = checked;
+    document.getElementById("leftCount").innerText = total - checked;
+    document.getElementById("finalMood").innerText = currentMood || "—";
+
+    document.getElementById("okMsg").classList.remove("show","success");
+
+    show('done', document.querySelectorAll(".nav button")[2]);
+}
+
+/* SUBMIT */
+function submit(){
+    let total = document.querySelectorAll(".t").length;
+    let checked = document.querySelectorAll(".t:checked").length;
+    const okMsg = document.getElementById("okMsg");
+
+    if(checked !== total){
+        if(document.getElementById("sababCard").style.display !== "block"){
+            document.getElementById("forgotCount").innerText = (total - checked);
+            document.getElementById("forgotOverlay").classList.add("show");
+            return;
+        }
+
+        const sabab = document.getElementById("sabab").value.trim();
+        if(!sabab){
+            okMsg.textContent = "⚠️ Iltimos, nega hammasi bajarilmagani haqida sababini yozing.";
+            okMsg.classList.remove("success");
+            okMsg.classList.add("show");
+            return;
+        }
+        okMsg.textContent = "✅ Qabul qilindi. Sababingizni tez orada hal qilamiz.";
+        okMsg.classList.add("show","success");
+        console.log("SABAB:", sabab);
+        console.log("COMMENT:", document.getElementById("comment").value);
+        return;
+    }
+
+    okMsg.textContent = "🎉 Hodisa opa bugungi ishni yakunladi!";
+    okMsg.classList.add("show","success");
+    console.log("COMMENT:", document.getElementById("comment").value);
+}
+
+function chooseSabab(){
+    document.getElementById("forgotOverlay").classList.remove("show");
+    document.getElementById("sababCard").style.display = "block";
+    document.getElementById("sabab").focus();
+}
+
+function backToTasks(){
+    document.getElementById("forgotOverlay").classList.remove("show");
+    document.getElementById("sababCard").style.display = "none";
+    document.getElementById("okMsg").classList.remove("show","success");
+    show('tasks', document.querySelectorAll(".nav button")[1]);
+}
+
+updateRing();
+</script>
+
+</body>
+</html>
